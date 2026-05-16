@@ -3,7 +3,7 @@
 
 # 🚀 Team Task Manager
 
-A modern AI-powered Team Task Manager built with React, Vite, Tailwind CSS, and Google AI Studio.  
+A modern AI-powered Team Task Manager built with React, Vite and Tailwind CSS.  
 Manage projects, assign tasks, collaborate with teams, and track productivity through a premium SaaS-style dashboard.
 
 </div>
