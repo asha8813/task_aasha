@@ -4,7 +4,6 @@ import api from '../services/api.ts';
 interface User {
   id: string;
   name: string;
-  email: string;
   role: 'Admin' | 'Member';
 }
 

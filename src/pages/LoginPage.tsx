@@ -3,14 +3,15 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Link, useNavigate } from 'react-router-dom';
-import { Mail, Lock, Loader2, ArrowRight } from 'lucide-react';
+import { Users, Loader2, ArrowRight } from 'lucide-react';
 import { useAuth } from '../context/AuthContext.tsx';
 import api from '../services/api.ts';
 import { motion } from 'motion/react';
+import { cn } from '../lib/utils.ts';
 
 const schema = yup.object({
-  email: yup.string().email('Invalid email').required('Email is required'),
-  password: yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
+  name: yup.string().required('Full name is required'),
+  role: yup.string().oneOf(['Admin', 'Member'], 'Please select a role').required('Role is required'),
 }).required();
 
 export default function LoginPage() {
@@ -19,9 +20,12 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const { register, handleSubmit, formState: { errors } } = useForm({
-    resolver: yupResolver(schema)
+  const { register, handleSubmit, formState: { errors }, watch } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: { role: 'Member' }
   });
+
+  const selectedRole = watch('role');
 
   const onSubmit = async (data: any) => {
     setLoading(true);
@@ -62,7 +66,7 @@ export default function LoginPage() {
                 +2k
               </div>
             </div>
-            <p className="text-indigo-100 font-medium">Join over 2,000 teams already using TeamFlow.</p>
+            <p className="text-indigo-100 font-medium">Join over 2,000 teams already using TaskNova.</p>
           </div>
         </div>
         {/* Animated Background Elements */}
@@ -91,8 +95,8 @@ export default function LoginPage() {
           className="w-full max-w-md space-y-10"
         >
           <header>
-            <h2 className="text-4xl font-bold text-white mb-3">Welcome back</h2>
-            <p className="text-slate-400">Please enter your details to sign in to your account.</p>
+            <h2 className="text-4xl font-bold text-white mb-3 tracking-tight">System Access</h2>
+            <p className="text-slate-400">Enter your name and select your role to proceed.</p>
           </header>
 
           {error && (
@@ -103,53 +107,64 @@ export default function LoginPage() {
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-slate-300 ml-1">Email address</label>
+              <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">Full Name</label>
               <div className="relative group">
-                <Mail className="absolute left-4 top-4 w-5 h-5 text-slate-500 group-focus-within:text-indigo-400 transition-colors" />
+                <Users className="absolute left-4 top-4 w-5 h-5 text-slate-500 group-focus-within:text-indigo-400 transition-colors" />
                 <input
-                  {...register('email')}
-                  type="email"
+                  {...register('name')}
+                  type="text"
                   className="w-full bg-slate-900 border border-slate-800 rounded-2xl py-4 pl-12 pr-4 text-white focus:outline-none focus:ring-2 ring-indigo-500/50 transition-all outline-none"
-                  placeholder="name@company.com"
+                  placeholder="e.g. John Smith"
                 />
               </div>
-              {errors.email && <p className="text-red-400 text-xs ml-1">{errors.email.message}</p>}
+              {errors.name && <p className="text-red-400 text-xs ml-1">{errors.name.message}</p>}
             </div>
 
-            <div className="space-y-2">
-              <div className="flex justify-between items-center px-1">
-                <label className="text-sm font-medium text-slate-300">Password</label>
-                <Link to="#" className="text-xs font-semibold text-indigo-400 hover:text-indigo-300 transition-colors">Forgot password?</Link>
+            <div className="space-y-3">
+              <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">Access Tier</label>
+              <div className="grid grid-cols-2 gap-4">
+                {['Admin', 'Member'].map((role: string) => (
+                  <label 
+                    key={role}
+                    className={cn(
+                      "flex flex-col items-center justify-center p-5 rounded-2xl border-2 cursor-pointer transition-all gap-2",
+                       selectedRole === role 
+                        ? "bg-indigo-600/10 border-indigo-500 text-white" 
+                        : "bg-slate-900 border-slate-800 text-slate-500 hover:border-slate-700"
+                    )}
+                  >
+                    <input 
+                      type="radio" 
+                      value={role} 
+                      {...register('role')} 
+                      className="hidden"
+                    />
+                    <span className="text-sm font-black uppercase tracking-widest">{role}</span>
+                    <span className="text-[10px] text-center opacity-70 font-medium">
+                      {role === 'Admin' ? 'Management Access' : 'Task Operations'}
+                    </span>
+                  </label>
+                ))}
               </div>
-              <div className="relative group">
-                <Lock className="absolute left-4 top-4 w-5 h-5 text-slate-500 group-focus-within:text-indigo-400 transition-colors" />
-                <input
-                  {...register('password')}
-                  type="password"
-                  className="w-full bg-slate-900 border border-slate-800 rounded-2xl py-4 pl-12 pr-4 text-white focus:outline-none focus:ring-2 ring-indigo-500/50 transition-all outline-none"
-                  placeholder="••••••••"
-                />
-              </div>
-              {errors.password && <p className="text-red-400 text-xs ml-1">{errors.password.message}</p>}
+              {errors.role && <p className="text-red-400 text-xs ml-1">{errors.role.message}</p>}
             </div>
 
             <button
               disabled={loading}
               type="submit"
-              className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-2xl shadow-lg shadow-indigo-500/20 transition-all flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-black uppercase tracking-widest py-4 rounded-2xl shadow-lg shadow-indigo-600/20 transition-all flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : (
                 <>
-                  Sign in to Dashboard
+                  Initialize Session
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </>
               )}
             </button>
           </form>
 
-          <p className="text-center text-slate-400 text-sm">
-            Don't have an account?{' '}
-            <Link to="/signup" className="font-bold text-white hover:text-indigo-400 transition-colors">Create account</Link>
+          <p className="text-center text-slate-500 text-[10px] font-black uppercase tracking-widest">
+            Secure Entry • High Density Operations
           </p>
         </motion.div>
       </div>

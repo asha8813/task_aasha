@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Link, useNavigate } from 'react-router-dom';
-import { Mail, Lock, User, Loader2, ArrowRight, ShieldCheck } from 'lucide-react';
+import { User, Loader2, ArrowRight, ShieldCheck } from 'lucide-react';
 import { useAuth } from '../context/AuthContext.tsx';
 import api from '../services/api.ts';
 import { motion } from 'motion/react';
@@ -11,8 +11,6 @@ import { cn } from '../lib/utils.ts';
 
 const schema = yup.object({
   name: yup.string().required('Full name is required'),
-  email: yup.string().email('Invalid email').required('Email is required'),
-  password: yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
   role: yup.string().oneOf(['Admin', 'Member'], 'Please select a role').required('Role is required'),
 }).required();
 
@@ -33,7 +31,8 @@ export default function SignupPage() {
     setLoading(true);
     setError('');
     try {
-      const response = await api.post('/auth/register', data);
+      // In this version, login also handles registration
+      const response = await api.post('/auth/login', data);
       login(response.data.token, response.data.user);
       navigate('/dashboard');
     } catch (err: any) {
@@ -52,14 +51,14 @@ export default function SignupPage() {
            <ShieldCheck className="w-16 h-16 text-indigo-500 mb-10" />
            <h2 className="text-4xl font-bold text-white mb-6 leading-tight">Secure & Scalable Team Management</h2>
            <p className="text-slate-400 text-lg leading-relaxed mb-10">
-             From startup to enterprise, TeamFlow provides the tools you need to keep your projects on track and your team synchronized.
+             From startup to enterprise, TaskNova provides the tools you need to keep your projects on track and your team synchronized.
            </p>
            <div className="grid grid-cols-2 gap-6">
               {[
                 { label: 'Cloud Storage', value: 'Unlimited' },
                 { label: 'Uptime', value: '99.9%' },
                 { label: 'Support', value: '24/7' },
-                { label: 'Security', value: 'AES-256' },
+                { label: 'Registry', value: 'Active' },
               ].map(item => (
                 <div key={item.label} className="p-4 bg-slate-800/50 rounded-2xl border border-slate-700/50">
                   <p className="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-1">{item.label}</p>
@@ -78,8 +77,8 @@ export default function SignupPage() {
           className="w-full max-w-md space-y-10 py-10"
         >
           <header>
-            <h2 className="text-4xl font-bold text-white mb-3">Create account</h2>
-            <p className="text-slate-400">Join TeamFlow and start managing projects today.</p>
+            <h2 className="text-4xl font-bold text-white mb-3 tracking-tight">Join Network</h2>
+            <p className="text-slate-400">Initialize your profile to begin operational tracking.</p>
           </header>
 
           {error && (
@@ -90,55 +89,27 @@ export default function SignupPage() {
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-slate-300 ml-1">Full Name</label>
+              <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">Full Name</label>
               <div className="relative group">
                 <User className="absolute left-4 top-4 w-5 h-5 text-slate-500 group-focus-within:text-indigo-400 transition-colors" />
                 <input
                   {...register('name')}
                   type="text"
                   className="w-full bg-slate-900 border border-slate-800 rounded-2xl py-4 pl-12 pr-4 text-white focus:outline-none focus:ring-2 ring-indigo-500/50 transition-all outline-none"
-                  placeholder="John Doe"
+                  placeholder="Enter your full name"
                 />
               </div>
               {errors.name && <p className="text-red-400 text-xs ml-1">{errors.name.message}</p>}
             </div>
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-slate-300 ml-1">Email address</label>
-              <div className="relative group">
-                <Mail className="absolute left-4 top-4 w-5 h-5 text-slate-500 group-focus-within:text-indigo-400 transition-colors" />
-                <input
-                  {...register('email')}
-                  type="email"
-                  className="w-full bg-slate-900 border border-slate-800 rounded-2xl py-4 pl-12 pr-4 text-white focus:outline-none focus:ring-2 ring-indigo-500/50 transition-all outline-none"
-                  placeholder="name@company.com"
-                />
-              </div>
-              {errors.email && <p className="text-red-400 text-xs ml-1">{errors.email.message}</p>}
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-slate-300 ml-1">Password</label>
-              <div className="relative group">
-                <Lock className="absolute left-4 top-4 w-5 h-5 text-slate-500 group-focus-within:text-indigo-400 transition-colors" />
-                <input
-                  {...register('password')}
-                  type="password"
-                  className="w-full bg-slate-900 border border-slate-800 rounded-2xl py-4 pl-12 pr-4 text-white focus:outline-none focus:ring-2 ring-indigo-500/50 transition-all outline-none"
-                  placeholder="••••••••"
-                />
-              </div>
-              {errors.password && <p className="text-red-400 text-xs ml-1">{errors.password.message}</p>}
-            </div>
-
             <div className="space-y-3">
-              <label className="text-sm font-medium text-slate-300 ml-1">Your Role</label>
+              <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">Your Role</label>
               <div className="grid grid-cols-2 gap-4">
                 {['Admin', 'Member'].map(role => (
                   <label 
                     key={role}
                     className={cn(
-                      "flex flex-col items-center justify-center p-4 rounded-2xl border-2 cursor-pointer transition-all gap-2",
+                      "flex flex-col items-center justify-center p-5 rounded-2xl border-2 cursor-pointer transition-all gap-2",
                        selectedRole === role 
                         ? "bg-indigo-600/10 border-indigo-500 text-white" 
                         : "bg-slate-900 border-slate-800 text-slate-500 hover:border-slate-700"
@@ -150,9 +121,9 @@ export default function SignupPage() {
                       {...register('role')} 
                       className="hidden"
                     />
-                    <span className="text-sm font-bold">{role}</span>
-                    <span className="text-[10px] text-center opacity-70">
-                      {role === 'Admin' ? 'Can manage projects' : 'Assigned tasks only'}
+                    <span className="text-sm font-black uppercase tracking-widest">{role}</span>
+                    <span className="text-[10px] text-center opacity-70 font-medium">
+                      {role === 'Admin' ? 'Management' : 'Execution'}
                     </span>
                   </label>
                 ))}
@@ -163,7 +134,7 @@ export default function SignupPage() {
             <button
               disabled={loading}
               type="submit"
-              className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-2xl shadow-lg shadow-indigo-500/20 transition-all flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-black uppercase tracking-widest py-4 rounded-2xl shadow-lg shadow-indigo-600/20 transition-all flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : (
                 <>

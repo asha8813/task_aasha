@@ -71,7 +71,7 @@ export default function DashboardLayout() {
           <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
             <CheckSquare className="text-white w-6 h-6" />
           </div>
-          <span className="font-bold text-xl tracking-tight text-white">TaskMaster</span>
+          <span className="font-bold text-xl tracking-tight text-white">TaskNova</span>
         </div>
 
         <nav className="mt-4 flex-1 px-4 space-y-1">

@@ -36,7 +36,7 @@ export default function LandingPage() {
             <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center">
               <CheckSquare className="text-white w-6 h-6" />
             </div>
-            <span className="text-xl font-bold tracking-tight">TeamFlow</span>
+            <span className="text-xl font-bold tracking-tight">TaskNova</span>
           </div>
           
           <div className="hidden md:flex items-center gap-10 text-sm font-medium text-slate-400">
@@ -70,7 +70,7 @@ export default function LandingPage() {
               <span className="bg-gradient-to-r from-indigo-400 to-sky-400 bg-clip-text text-transparent">a pro professional.</span>
             </h1>
             <p className="max-w-2xl mx-auto text-xl text-slate-400 mb-12 leading-relaxed">
-              The all-in-one platform for team projects, task tracking, and data-driven insights. Build faster and smarter with TeamFlow.
+              The all-in-one platform for team projects, task tracking, and data-driven insights. Build faster and smarter with TaskNova.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
               <Link to="/signup" className="w-full sm:w-auto px-10 py-5 bg-indigo-600 hover:bg-indigo-500 rounded-2xl text-lg font-bold shadow-2xl shadow-indigo-500/40 transition-all flex items-center justify-center gap-3 group">
@@ -148,7 +148,7 @@ export default function LandingPage() {
               <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
                 <CheckSquare className="text-white w-5 h-5" />
               </div>
-              <span className="text-lg font-bold tracking-tight">TeamFlow</span>
+              <span className="text-lg font-bold tracking-tight">TaskNova</span>
             </div>
             <p className="text-slate-500 text-sm leading-relaxed">
               The world's most advanced team task manager. Built for speed, precision, and collaboration.
@@ -190,7 +190,7 @@ export default function LandingPage() {
           </div>
         </div>
         <div className="max-w-7xl mx-auto px-6 mt-20 pt-8 border-t border-slate-900 text-center text-sm text-slate-600">
-          © 2026 TeamFlow Inc. All rights reserved. Built with ❤️ for productive teams.
+          © 2026 TaskNova Inc. All rights reserved. Built with ❤️ for productive teams.
         </div>
       </footer>
     </div>

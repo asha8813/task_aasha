@@ -57,12 +57,12 @@ export default function SettingsPage() {
            </div>
            <div>
               <h4 className="text-lg font-bold text-white">{user?.name}</h4>
-              <p className="text-sm text-slate-500">{user?.email}</p>
+              <p className="text-sm text-slate-500">{user?.role} Account</p>
               <button className="mt-2 text-xs font-bold text-indigo-400 hover:text-indigo-300">Change Avatar</button>
            </div>
         </div>
         <SettingItem label="Display Name" desc="How you appear to other team members." type="button" />
-        <SettingItem label="Email Address" desc="Your primary login and notification email." type="button" value={user?.email} />
+        <SettingItem label="Profile Role" desc="Your assigned access level in the workspace." type="button" />
       </SettingsSection>
 
       <SettingsSection 
